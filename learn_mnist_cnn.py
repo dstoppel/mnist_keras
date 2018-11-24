@@ -2,7 +2,7 @@ import keras
 
 from keras.datasets import mnist
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Conv2D, Flatten
+from keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPooling2D, BatchNormalization
 from keras import regularizers
 import matplotlib.pyplot as plt
 
@@ -28,6 +28,8 @@ model = Sequential()
 
 model.add(Conv2D(64, kernel_size=5,activation='relu', input_shape=(28,28,1)))
 model.add(Conv2D(32, kernel_size=3, activation='relu'))
+model.add(BatchNormalization(axis=-1))
+model.add(MaxPooling2D(pool_size=(3, 3)))
 model.add(Dropout(0.3))
 model.add(Dense(units=num_classes,activation='softmax', kernel_regularizer=regularizers.l2(0.1)))
 
