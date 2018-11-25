@@ -26,10 +26,11 @@ y_test = keras.utils.to_categorical(y_test, num_classes)
 # build model
 model = Sequential()
 
-model.add(Conv2D(64, kernel_size=5,activation='relu', input_shape=(28,28,1)))
-model.add(Conv2D(32, kernel_size=3, activation='relu'))
+model.add(Conv2D(64, kernel_size=5, padding='same', activation='relu', input_shape=(28,28,1)))
+model.add(Conv2D(32, kernel_size=3, padding='same', activation='relu'))
 model.add(BatchNormalization(axis=-1))
 model.add(MaxPooling2D(pool_size=(3, 3)))
+model.add(Flatten())
 model.add(Dropout(0.3))
 model.add(Dense(units=num_classes,activation='softmax', kernel_regularizer=regularizers.l2(0.1)))
 
