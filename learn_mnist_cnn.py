@@ -4,12 +4,12 @@ from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPooling2D, BatchNormalization
 from keras import regularizers
+from keras.utils import np_utils
 import matplotlib.pyplot as plt
 
 # load mnist
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-num_classes=10
 epochs=10
 batchsize=60
 
@@ -18,8 +18,16 @@ x_test = x_test.reshape(10000,  28,28,1)
 x_train = x_train.astype('float32')
 x_test = x_test.astype('float32')
 
+# Input normalization
+x_train = x_train / 255
+x_test = x_test / 255
+
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
 
 # convert class vectors to binary class matrices
+num_classes= y_train.shape[1]
+
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
@@ -39,8 +47,10 @@ model.compile(loss='categorical_crossentropy',
               optimizer='adagrad',
               metrics=['accuracy'])
 
+model.summary()
+
 # train
-history = model.fit(x_train, y_train, epochs=epochs, batch_size=40, validation_data=(x_test, y_test), verbose=1)
+history = model.fit(x_train, y_train, epochs=epochs, batch_size=batchsize, validation_data=(x_test, y_test), verbose=1)
 loss_and_metrics = model.evaluate(x_test, y_test,batch_size=batchsize, verbose=0)
 
 print('Test loss:', loss_and_metrics[0])
@@ -52,7 +62,7 @@ plt.plot(history.history['acc'])
 plt.plot(history.history['val_acc'])
 plt.title('NN Accuracy')
 plt.ylabel('accuracy')
-plt.xlabel('epoc')
+plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
